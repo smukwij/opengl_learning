@@ -8,6 +8,7 @@ set(SOURCES
     ${CMAKE_SOURCE_DIR}/trainings/Program.cc
     ${CMAKE_SOURCE_DIR}/trainings/Vao.cc
     ${CMAKE_SOURCE_DIR}/trainings/Vbo.cc
+    ${CMAKE_SOURCE_DIR}/trainings/Ebo.cc
     )
 
 add_library(trainings STATIC ${SOURCES})

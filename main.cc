@@ -9,6 +9,7 @@
 #include "trainings/Program.hh"
 #include "trainings/Vao.hh"
 #include "trainings/Vbo.hh"
+#include "trainings/Ebo.hh"
 
 int main()
 {
@@ -52,10 +53,18 @@ int main()
 
     vs.destroy();
     fs.destroy();
-    
-    float vertices [] = {-0.5f, -0.5f, 0.0f,
-                                    0.5f, -0.5f, 0.0f,
-                                    0.0f, 0.5f, 0.0f};
+
+    float vertices [] = {0.5f, 0.5f, 0.0f, 
+                         0.5f, -0.5f, 0.0f,
+                        -0.5f, -0.5f, 0.0f,
+                        -0.5f, 0.5f, 0.0f
+                        };
+
+    uint32_t indices[] = {
+                         0, 1, 3,
+                         1, 2, 3
+                         };
+
     Vao vao;
     vao.create();
     vao.bind();
@@ -64,12 +73,24 @@ int main()
     vbo.create();
     vbo.bind();
     vbo.buffer_data(vertices, sizeof(vertices));
-    vbo.un_bind();
 
+    Ebo ebo;
+    ebo.create();
+    ebo.bind();
+    ebo.buffer_data(indices, sizeof(indices));
+    
+    vbo.enable_vertex();
+    vbo.un_bind();
+    
     vao.un_bind();
+    ebo.un_bind();
 
     RenderingLoop rl;
     rl.run( window, pr.get_id(), vao.get_id() );
+
+    vao.destroy();
+    vbo.destroy();
+    ebo.destroy();
 
     glfwTerminate();
     return 0;

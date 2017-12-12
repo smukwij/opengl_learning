@@ -26,7 +26,8 @@ void RenderingLoop::run(GLFWwindow* window, uint32_t program_id, uint32_t vao)
 
         glUseProgram(program_id);
         glBindVertexArray(vao);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+    
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

@@ -18,7 +18,8 @@ namespace
 
 std::string ShaderLoader::load(const std::string& file_name)
 {
-    std::ifstream file(get_shaders_path() + file_name);
+    std::string tmp = get_shaders_path() + file_name;
+    std::ifstream file(tmp);
 
     if(true == file.is_open())
     {
