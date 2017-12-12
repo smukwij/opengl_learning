@@ -4,6 +4,10 @@ set(SOURCES
     ${CMAKE_SOURCE_DIR}/trainings/FrameBufferHandler.cc
     ${CMAKE_SOURCE_DIR}/trainings/RenderingLoop.cc
     ${CMAKE_SOURCE_DIR}/trainings/ShaderLoader.cc
+    ${CMAKE_SOURCE_DIR}/trainings/Shader.cc
+    ${CMAKE_SOURCE_DIR}/trainings/Program.cc
+    ${CMAKE_SOURCE_DIR}/trainings/Vao.cc
+    ${CMAKE_SOURCE_DIR}/trainings/Vbo.cc
     )
 
 add_library(trainings STATIC ${SOURCES})

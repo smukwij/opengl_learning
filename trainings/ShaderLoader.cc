@@ -5,12 +5,20 @@
 #include "ShaderLoader.hh"
 
 
-
-std::string ShaderLoader::load(const std::string& path)
+namespace 
 {
-    std::ifstream file(path);
+    std::string get_shaders_path()
+    {
+        return "/home/reczek/opengl_learning/trainings/shaders/";
+    }
+}
 
-    std::cout << path << std::endl;
+
+
+
+std::string ShaderLoader::load(const std::string& file_name)
+{
+    std::ifstream file(get_shaders_path() + file_name);
 
     if(true == file.is_open())
     {

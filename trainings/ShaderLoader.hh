@@ -5,5 +5,5 @@
 class ShaderLoader
 {
     public:
-    std::string load(const std::string& path);
+    std::string load(const std::string& file);
 };
