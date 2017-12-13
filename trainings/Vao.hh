@@ -8,8 +8,8 @@ class Vao
         Vao();
         ~Vao();
         void create();
-        void bind();
-        void un_bind();
+        void bind() const;
+        void un_bind() const;
         void destroy(); 
 
         uint32_t get_id() const;

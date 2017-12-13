@@ -7,9 +7,9 @@
 #include "trainings/RenderingLoop.hh"
 #include "trainings/Shader.hh"
 #include "trainings/Program.hh"
-#include "trainings/Vao.hh"
-#include "trainings/Vbo.hh"
+#include "trainings/VaoWithVbo.hh"
 #include "trainings/Ebo.hh"
+
 
 int main()
 {
@@ -45,52 +45,39 @@ int main()
     vs.create("triangle.vs", GL_VERTEX_SHADER);
     Shader fs;
     fs.create("triangle.fs", GL_FRAGMENT_SHADER);
-   
-    Program pr;
-    pr.add_shader_id(vs.get_id());
-    pr.add_shader_id(fs.get_id());
-    pr.create();
+
+    Shader vs2;
+    Shader fs2;
+    vs2.create("triangle.vs", GL_VERTEX_SHADER);
+    fs2.create("triangle_yellow.fs", GL_FRAGMENT_SHADER);
+
+    std::vector<ProgramUPtr> programs;
+    programs.push_back(create_program(vs.get_id(), fs.get_id()));
+    programs.push_back(create_program(vs2.get_id(), fs2.get_id()));
 
     vs.destroy();
     fs.destroy();
 
-    float vertices [] = {0.5f, 0.5f, 0.0f, 
-                         0.5f, -0.5f, 0.0f,
-                        -0.5f, -0.5f, 0.0f,
-                        -0.5f, 0.5f, 0.0f
-                        };
+    vs2.destroy();
+    fs2.destroy();
 
-    uint32_t indices[] = {
-                         0, 1, 3,
-                         1, 2, 3
-                         };
+    float first_triangle [] = {-1.0f, 0.0f, 0.0f, 
+                               -0.5f, 0.5f, 0.0f,
+                                0.0f, 0.0f, 0.0f,
+                              };
 
-    Vao vao;
-    vao.create();
-    vao.bind();
+    float second_triangle [] = { 0.0f, 0.0f, 0.0f,
+                                 0.5f, 0.5f, 0.0f,
+                                 1.0f, 0.0f, 0.0f
+                               };
+    {
 
-    Vbo vbo;
-    vbo.create();
-    vbo.bind();
-    vbo.buffer_data(vertices, sizeof(vertices));
-
-    Ebo ebo;
-    ebo.create();
-    ebo.bind();
-    ebo.buffer_data(indices, sizeof(indices));
-    
-    vbo.enable_vertex();
-    vbo.un_bind();
-    
-    vao.un_bind();
-    ebo.un_bind();
-
-    RenderingLoop rl;
-    rl.run( window, pr.get_id(), vao.get_id() );
-
-    vao.destroy();
-    vbo.destroy();
-    ebo.destroy();
+        std::vector<VaoWithVboUPtr> vaos;
+        vaos.push_back(create_vao_with_vbo(first_triangle, sizeof(first_triangle)));
+        vaos.push_back(create_vao_with_vbo(second_triangle, sizeof(second_triangle)));
+        RenderingLoop rl;
+        rl.run( window, programs, vaos );
+    }
 
     glfwTerminate();
     return 0;

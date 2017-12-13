@@ -40,7 +40,11 @@ void Program::create()
     }
     glLinkProgram(_id);
     check_and_print_log(_id);
+}
 
+void Program::use() const
+{
+    glUseProgram(_id);
 }
 
 uint32_t Program::get_id() const

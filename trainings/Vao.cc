@@ -14,12 +14,12 @@ void Vao::create()
     glGenVertexArrays(1, &_id);
 }
 
-void Vao::bind()
+void Vao::bind() const
 {
     glBindVertexArray(_id);
 }
 
-void Vao::un_bind()
+void Vao::un_bind() const
 {
     glBindVertexArray(0);
 }

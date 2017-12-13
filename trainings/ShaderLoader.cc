@@ -30,7 +30,7 @@ std::string ShaderLoader::load(const std::string& file_name)
     }
     else
     {
-        std::cout << "bad" << std::endl;
+        std::cout << "Cannot open file: " << tmp << std::endl;
     }
     return "";
 }

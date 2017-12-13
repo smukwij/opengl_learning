@@ -1,6 +1,8 @@
 #include "RenderingLoop.hh"
 //#include <glad/glad.h>
 
+#include <iostream>
+
 namespace 
 {
     void process_input(GLFWwindow* window)
@@ -15,7 +17,7 @@ namespace
 
 
 
-void RenderingLoop::run(GLFWwindow* window, uint32_t program_id, uint32_t vao)
+void RenderingLoop::run(GLFWwindow* window, std::vector<ProgramUPtr>& programs, std::vector<VaoWithVboUPtr>& vaos)
 {
     while(false == glfwWindowShouldClose(window))
     {
@@ -24,11 +26,14 @@ void RenderingLoop::run(GLFWwindow* window, uint32_t program_id, uint32_t vao)
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glUseProgram(program_id);
-        glBindVertexArray(vao);
-    
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        for(uint32_t u = 0; u < vaos.size(); ++u) 
+        {
+            programs.at(u)->use();
+            vaos.at(u)->bind_vao();
 
+            glDrawArrays(GL_TRIANGLES, 0, 3);
+            vaos.at(u)->unbind_vao();
+        }
         glfwSwapBuffers(window);
         glfwPollEvents();
     }

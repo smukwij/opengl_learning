@@ -16,12 +16,12 @@ void Vbo::create()
     glGenBuffers(1, &_id);
 }
 
-void Vbo::bind()
+void Vbo::bind() const
 {
     glBindBuffer(GL_ARRAY_BUFFER, _id);
 }
 
-void Vbo::un_bind()
+void Vbo::un_bind() const
 {
    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }

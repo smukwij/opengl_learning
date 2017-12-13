@@ -1,11 +1,14 @@
 cmake_minimum_required(VERSION 2.6)
 
+project(opengl_learning)
+
 set(CMAKE_C_COMPILER /usr/bin/clang-5.0)
 set(CMAKE_CXX_COMPILER /usr/bin/clang++-5.0)
-set(CMAKE_CXX_FLAGS "-Werror -pedantic -std=c++14")
+set(CMAKE_CXX_FLAGS "-Werror -pedantic" )
 set(CMAKE_EXE_LINKER_FLAG "")
-
-project(opengl_learning)
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 link_directories(${CMAKE_SOURCE_DIR}/lib)
 link_directories(/usr/lib/x86_64-linux-gnu )
