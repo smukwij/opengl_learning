@@ -1,7 +1,8 @@
 #include "RenderingLoop.hh"
-//#include <glad/glad.h>
+#include "Uniform.hh"
 
 #include <iostream>
+#include <cmath>
 
 namespace 
 {
@@ -13,12 +14,30 @@ namespace
         }
     }
 
+    float get_green_value()
+    {
+        return std::sin(glfwGetTime());
+    }
+
+    float get_x_value()
+    {
+        return (std::sin(glfwGetTime())/2.0f)+0.5f;
+    }
 }
 
 
 
 void RenderingLoop::run(GLFWwindow* window, std::vector<ProgramUPtr>& programs, std::vector<VaoWithVboUPtr>& vaos)
 {
+    Uniform uniform;
+    for(const auto& pr : programs) 
+    {
+        if(true == pr->is_uniform())
+        {
+            uniform.init(pr->get_id(), "offset");
+        }
+    }
+
     while(false == glfwWindowShouldClose(window))
     {
         process_input(window);
@@ -29,6 +48,11 @@ void RenderingLoop::run(GLFWwindow* window, std::vector<ProgramUPtr>& programs, 
         for(uint32_t u = 0; u < vaos.size(); ++u) 
         {
             programs.at(u)->use();
+            if(true == programs.at(u)->is_uniform())
+            {
+                uniform.set_value(get_x_value());
+            }
+
             vaos.at(u)->bind_vao();
 
             glDrawArrays(GL_TRIANGLES, 0, 3);

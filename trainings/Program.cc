@@ -20,6 +20,7 @@ namespace {
 
 Program::Program()
     : _id(0)
+    , _use_uniform(false)
 {
 }
 
@@ -45,6 +46,16 @@ void Program::create()
 void Program::use() const
 {
     glUseProgram(_id);
+}
+
+void Program::use_uniform()
+{
+    _use_uniform = true;
+}
+
+bool Program::is_uniform() const
+{
+    return _use_uniform;
 }
 
 uint32_t Program::get_id() const

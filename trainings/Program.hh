@@ -15,8 +15,12 @@ class Program
 
         uint32_t get_id() const;
 
+        void use_uniform();
+        bool is_uniform() const;
+
     private:
         uint32_t _id;
+        bool _use_uniform;
         std::vector<uint32_t> _shader_ids;
 };
 

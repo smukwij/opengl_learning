@@ -45,36 +45,25 @@ int main()
     vs.create("triangle.vs", GL_VERTEX_SHADER);
     Shader fs;
     fs.create("triangle.fs", GL_FRAGMENT_SHADER);
-
-    Shader vs2;
-    Shader fs2;
-    vs2.create("triangle.vs", GL_VERTEX_SHADER);
-    fs2.create("triangle_yellow.fs", GL_FRAGMENT_SHADER);
-
+    ProgramUPtr program = create_program(vs.get_id(), fs.get_id());
+    program->use_uniform();
+ 
     std::vector<ProgramUPtr> programs;
-    programs.push_back(create_program(vs.get_id(), fs.get_id()));
-    programs.push_back(create_program(vs2.get_id(), fs2.get_id()));
+    programs.push_back(std::move(program));
 
     vs.destroy();
     fs.destroy();
 
-    vs2.destroy();
-    fs2.destroy();
 
-    float first_triangle [] = {-1.0f, 0.0f, 0.0f, 
-                               -0.5f, 0.5f, 0.0f,
-                                0.0f, 0.0f, 0.0f,
+    float first_triangle [] = { 0.0f, 0.5f, 0.0f,    1.0f, 0.0f, 0.0f,
+                                0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,
+                                -0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f
                               };
 
-    float second_triangle [] = { 0.0f, 0.0f, 0.0f,
-                                 0.5f, 0.5f, 0.0f,
-                                 1.0f, 0.0f, 0.0f
-                               };
     {
 
         std::vector<VaoWithVboUPtr> vaos;
         vaos.push_back(create_vao_with_vbo(first_triangle, sizeof(first_triangle)));
-        vaos.push_back(create_vao_with_vbo(second_triangle, sizeof(second_triangle)));
         RenderingLoop rl;
         rl.run( window, programs, vaos );
     }
