@@ -19,7 +19,7 @@ void Vao::bind() const
     glBindVertexArray(_id);
 }
 
-void Vao::un_bind() const
+void Vao::unbind() const
 {
     glBindVertexArray(0);
 }

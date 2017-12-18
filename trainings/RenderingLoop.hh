@@ -6,11 +6,12 @@
 #include <vector>
 #include "VaoWithVbo.hh"
 #include "Program.hh"
+#include "Texture.hh"
 
 class RenderingLoop
 {
     public:
-        void run(GLFWwindow* window, std::vector<ProgramUPtr>& programs, std::vector<VaoWithVboUPtr>& vaos);
+        void run(GLFWwindow* window, std::vector<ProgramUPtr>& programs, std::vector<VaoWithVboUPtr>& vaos, Texture& tex);
 
 };
 

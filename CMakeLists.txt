@@ -22,10 +22,12 @@ set(SOURCES
 
 add_subdirectory(glad)
 add_subdirectory(trainings)
+add_subdirectory(stb_image)
 
 add_executable(opengl_learning ${SOURCES})
 
 target_link_libraries(opengl_learning glad)
+target_link_libraries(opengl_learning stb_image)
 target_link_libraries(opengl_learning trainings)
 target_link_libraries(opengl_learning glfw3)
 target_link_libraries(opengl_learning dl)

@@ -11,7 +11,7 @@ class Ebo
         ~Ebo();
         void create();
         void bind();
-        void un_bind();
+        void unbind();
         
         void buffer_data(uint32_t* data, size_t size);
         void destroy();

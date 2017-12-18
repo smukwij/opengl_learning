@@ -21,7 +21,7 @@ void Vbo::bind() const
     glBindBuffer(GL_ARRAY_BUFFER, _id);
 }
 
-void Vbo::un_bind() const
+void Vbo::unbind() const
 {
    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
@@ -33,10 +33,12 @@ void Vbo::buffer_data(float* data, size_t size)
 
 void Vbo::enable_vertex()
 {
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)(3*sizeof(float)));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8*sizeof(float), (void*)0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8*sizeof(float), (void*)(3*sizeof(float)));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8*sizeof(float), (void*)(6*sizeof(float)));
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
 }
 
 

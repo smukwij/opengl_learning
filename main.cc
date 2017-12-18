@@ -8,7 +8,7 @@
 #include "trainings/Shader.hh"
 #include "trainings/Program.hh"
 #include "trainings/VaoWithVbo.hh"
-#include "trainings/Ebo.hh"
+#include "trainings/Texture.hh"
 
 
 int main()
@@ -55,17 +55,28 @@ int main()
     fs.destroy();
 
 
-    float first_triangle [] = { 0.0f, 0.5f, 0.0f,    1.0f, 0.0f, 0.0f,
-                                0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,
-                                -0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f
-                              };
+    float ver [] = { 0.5f, 0.5f, 0.0f,    1.0f, 0.0f, 0.0f,   1.0f, 1.0f,
+                     0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,
+                    -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,
+                    -0.5f, 0.5f, 0.0f,    1.0f, 1.0f, 0.0f,   0.0f, 1.0f
+    };
+
+    uint32_t ind [] = {0, 1, 3,
+                       1, 2, 3 
+    };
 
     {
+        Texture tex;
+        tex.create();
+        tex.bind();
+        tex.load("wall.jpg");
+        tex.set_params();
+        tex.unbind();
 
         std::vector<VaoWithVboUPtr> vaos;
-        vaos.push_back(create_vao_with_vbo(first_triangle, sizeof(first_triangle)));
+        vaos.push_back(create_vao_with_vbo(ver, sizeof(ver), ind, sizeof(ind)));
         RenderingLoop rl;
-        rl.run( window, programs, vaos );
+        rl.run( window, programs, vaos, tex );
     }
 
     glfwTerminate();

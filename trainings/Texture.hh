@@ -1,19 +1,24 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
 
-class Vao
+class Image;
+
+
+class Texture 
 {
     public:
-        Vao();
-        ~Vao();
+        Texture();
+        ~Texture();
         void create();
         void bind() const;
+        void load(const std::string& file);
+        void set_params() const;
         void unbind() const;
         void destroy(); 
-
-        uint32_t get_id() const;
 
     private:
         uint32_t _id;
 };
+

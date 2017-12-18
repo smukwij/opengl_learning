@@ -20,7 +20,7 @@ void Ebo::bind()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _id);
 }
 
-void Ebo::un_bind()
+void Ebo::unbind()
 {
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }

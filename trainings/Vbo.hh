@@ -11,7 +11,7 @@ class Vbo
         ~Vbo();
         void create();
         void bind() const;
-        void un_bind() const;
+        void unbind() const;
         
         void buffer_data(float* data, size_t size);
         void enable_vertex();

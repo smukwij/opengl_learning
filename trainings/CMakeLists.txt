@@ -11,6 +11,10 @@ set(SOURCES
     ${CMAKE_SOURCE_DIR}/trainings/Ebo.cc
     ${CMAKE_SOURCE_DIR}/trainings/VaoWithVbo.cc
     ${CMAKE_SOURCE_DIR}/trainings/Uniform.cc
+    ${CMAKE_SOURCE_DIR}/trainings/Image.cc
+    ${CMAKE_SOURCE_DIR}/trainings/Texture.cc
     )
 
 add_library(trainings STATIC ${SOURCES})
+target_link_libraries(trainings stb_image)
+
