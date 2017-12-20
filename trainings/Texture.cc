@@ -27,6 +27,10 @@ void Texture::load(const std::string& file)
     glGenerateMipmap(GL_TEXTURE_2D); 
 }
 
+void Texture::activate(const uint32_t texture_unit)
+{
+    glActiveTexture(GL_TEXTURE0+texture_unit);
+}
 void Texture::bind() const
 {
     glBindTexture(GL_TEXTURE_2D, _id);

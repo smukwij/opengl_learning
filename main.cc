@@ -66,17 +66,34 @@ int main()
     };
 
     {
-        Texture tex;
-        tex.create();
-        tex.bind();
-        tex.load("container.jpg");
-        tex.set_params();
-        tex.unbind();
+        TextureUPtr tex = std::make_unique<Texture>();
+        tex->create();
+        tex->bind();
+        tex->load("container.jpg");
+//        tex->load("awesomeface.jpg");
+        tex->set_params();
+        
+        TextureUPtr tex2 = std::make_unique<Texture>();
+        tex2->create();
+        tex2->bind();
+        tex2->load("awesomeface.jpg");
+//        tex2->load("container.jpg");
+
+        std::vector<TextureUPtr> textures;
+        textures.push_back(std::move(tex));
+        textures.push_back(std::move(tex2));
+
+        programs.at(0)->use();
+        glUniform1i(glGetUniformLocation(programs.at(0)->get_id(), "texture1"), 0);
+        glUniform1i(glGetUniformLocation(programs.at(0)->get_id(), "texture2"), 1);
+
+        tex->unbind();
+        tex2->unbind();
 
         std::vector<VaoWithVboUPtr> vaos;
         vaos.push_back(create_vao_with_vbo(ver, sizeof(ver), ind, sizeof(ind)));
         RenderingLoop rl;
-        rl.run( window, programs, vaos, tex );
+        rl.run( window, programs, vaos, textures );
     }
 
     glfwTerminate();

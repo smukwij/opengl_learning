@@ -11,7 +11,10 @@
 class RenderingLoop
 {
     public:
-        void run(GLFWwindow* window, std::vector<ProgramUPtr>& programs, std::vector<VaoWithVboUPtr>& vaos, Texture& tex);
+        void run(GLFWwindow* window
+                , std::vector<ProgramUPtr>& programs
+                , std::vector<VaoWithVboUPtr>& vaos
+                , std::vector<TextureUPtr>& tex);
 
 };
 

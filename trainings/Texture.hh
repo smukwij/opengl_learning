@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <string>
+#include <memory>
 
 class Image;
 
@@ -12,6 +13,7 @@ class Texture
         Texture();
         ~Texture();
         void create();
+        void activate(const uint32_t texture_unit);
         void bind() const;
         void load(const std::string& file);
         void set_params() const;
@@ -21,4 +23,7 @@ class Texture
     private:
         uint32_t _id;
 };
+
+using TextureUPtr = std::unique_ptr<Texture>;
+
 

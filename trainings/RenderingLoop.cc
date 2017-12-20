@@ -27,7 +27,10 @@ namespace
 
 
 
-void RenderingLoop::run(GLFWwindow* window, std::vector<ProgramUPtr>& programs, std::vector<VaoWithVboUPtr>& vaos, Texture& tex)
+void RenderingLoop::run(GLFWwindow* window
+        , std::vector<ProgramUPtr>& programs
+        , std::vector<VaoWithVboUPtr>& vaos
+        , std::vector<TextureUPtr>& tex)
 {
     Uniform uniform;
     for(const auto& pr : programs) 
@@ -53,7 +56,11 @@ void RenderingLoop::run(GLFWwindow* window, std::vector<ProgramUPtr>& programs, 
                 uniform.set_value(get_x_value());
             }
 
-            tex.bind();
+            for(uint32_t t = 0; t < tex.size(); ++t)
+            {
+                tex.at(t)->activate(t);
+                tex.at(t)->bind();
+            }
             vaos.at(u)->bind_vao();
 
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
