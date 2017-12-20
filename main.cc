@@ -69,7 +69,7 @@ int main()
         Texture tex;
         tex.create();
         tex.bind();
-        tex.load("wall.jpg");
+        tex.load("container.jpg");
         tex.set_params();
         tex.unbind();
 
