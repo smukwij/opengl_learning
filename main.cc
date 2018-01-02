@@ -11,6 +11,7 @@
 #include "trainings/Texture.hh"
 
 
+
 int main()
 {
     constexpr uint32_t width = 800;
@@ -70,14 +71,12 @@ int main()
         tex->create();
         tex->bind();
         tex->load("container.jpg");
-//        tex->load("awesomeface.jpg");
         tex->set_params();
         
         TextureUPtr tex2 = std::make_unique<Texture>();
         tex2->create();
         tex2->bind();
         tex2->load("awesomeface.jpg");
-//        tex2->load("container.jpg");
 
         std::vector<TextureUPtr> textures;
         textures.push_back(std::move(tex));
@@ -86,7 +85,7 @@ int main()
         programs.at(0)->use();
         glUniform1i(glGetUniformLocation(programs.at(0)->get_id(), "texture1"), 0);
         glUniform1i(glGetUniformLocation(programs.at(0)->get_id(), "texture2"), 1);
-
+        
         tex->unbind();
         tex2->unbind();
 
