@@ -1,21 +1,17 @@
 #pragma once
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-
 #include <vector>
-#include "VaoWithVbo.hh"
-#include "Program.hh"
-#include "Texture.hh"
+#include <memory>
+
+class OpenGLObject;
+struct GLFWwindow;
+
 
 class RenderingLoop
 {
     public:
         void run(GLFWwindow* window
-                , std::vector<ProgramUPtr>& programs
-                , std::vector<VaoWithVboUPtr>& vaos
-                , std::vector<TextureUPtr>& tex);
-
+                , std::vector<std::unique_ptr<OpenGLObject>>& objects);
 };
 
 
