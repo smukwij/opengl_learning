@@ -31,9 +31,8 @@ namespace
 
     const float* get_trans_matrix(glm::mat4& trans)
     {
+        trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
         trans = glm::rotate(trans, static_cast<float>(glfwGetTime()), glm::vec3(0.0, 0.0, 1.0));
-        trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
-
         return glm::value_ptr(trans);
     }
 }
