@@ -3,6 +3,7 @@ set(SOURCES
     ${CMAKE_SOURCE_DIR}/trainings/RenderingLoop.cc
     ${CMAKE_SOURCE_DIR}/trainings/WindowCreator.cc
     ${CMAKE_SOURCE_DIR}/trainings/FirstObject.cc
+    ${CMAKE_SOURCE_DIR}/trainings/SecondObject.cc
     ${CMAKE_SOURCE_DIR}/trainings/utils/FrameBufferHandler.cc
     ${CMAKE_SOURCE_DIR}/trainings/utils/ShaderLoader.cc
     ${CMAKE_SOURCE_DIR}/trainings/utils/Shader.cc

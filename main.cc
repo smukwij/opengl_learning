@@ -3,6 +3,7 @@
 
 #include <glad/glad.h>
 #include "trainings/FirstObject.hh"
+#include "trainings/SecondObject.hh"
 #include "trainings/WindowCreator.hh"
 #include "trainings/utils/FrameBufferHandler.hh"
 #include "trainings/RenderingLoop.hh"
@@ -41,7 +42,8 @@ int main()
 
     std::vector<std::unique_ptr<OpenGLObject>> _objects;
     _objects.push_back(create_and_init<FirstObject>()); 
-
+    _objects.push_back(create_and_init<SecondObject>());
+    
     RenderingLoop rl;
     rl.run( window, _objects );
   
