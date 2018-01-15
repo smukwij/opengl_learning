@@ -9,7 +9,6 @@
 #include "trainings/RenderingLoop.hh"
 
 
-
 int main()
 {
     constexpr uint32_t width = 800;
@@ -42,7 +41,7 @@ int main()
 
     std::vector<std::unique_ptr<OpenGLObject>> _objects;
     _objects.push_back(create_and_init<FirstObject>()); 
-    _objects.push_back(create_and_init<SecondObject>());
+//    _objects.push_back(create_and_init<SecondObject>());
     
     RenderingLoop rl;
     rl.run( window, _objects );

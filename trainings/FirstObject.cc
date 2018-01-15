@@ -21,7 +21,7 @@ FirstObject::FirstObject()
 FirstObject:: ~FirstObject()
 {
 }
- 
+
 void FirstObject::setup()
 {
     Shader vs;
@@ -29,7 +29,6 @@ void FirstObject::setup()
     Shader fs;
     fs.create("triangle.fs", GL_FRAGMENT_SHADER);
     _program = create_program(vs.get_id(), fs.get_id());
-    _program->use_uniform();
 
     vs.destroy();
     fs.destroy();
@@ -51,24 +50,75 @@ void FirstObject::setup()
     _program->use();
     glUniform1i(glGetUniformLocation(_program->get_id(), "texture1"), 0);
     glUniform1i(glGetUniformLocation(_program->get_id(), "texture2"), 1);
-    _uniform = std::make_unique<Uniform>();
-    _uniform->init(_program->get_id(), "transform");
-    
+
     tex->unbind();
     tex2->unbind();
 
+    glm::mat4 view;
+    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 
-    float ver [] = { 0.5f, 0.5f, 0.0f,    1.0f, 0.0f, 0.0f,   1.0f, 1.0f,
-                     0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,
-                    -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,
-                    -0.5f, 0.5f, 0.0f,    1.0f, 1.0f, 0.0f,   0.0f, 1.0f
+    constexpr float width = 800.0f;
+    constexpr float height = 600.0f;
+    glm::mat4 projection;
+    projection = glm::perspective(glm::radians(45.0f), width/height, 0.1f, 100.0f);
+
+     _uniform = std::make_unique<Uniform>();
+    _uniform->init(_program->get_id(), "model");
+
+    int view_loc = glGetUniformLocation(_program->get_id(), "view");
+    glUniformMatrix4fv(view_loc, 1, GL_FALSE, glm::value_ptr(view));
+
+    int projection_loc = glGetUniformLocation(_program->get_id(), "projection");
+    glUniformMatrix4fv(projection_loc, 1, GL_FALSE, glm::value_ptr(projection));
+
+
+    float ver[] = {
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
     };
 
-    uint32_t ind [] = {0, 1, 3,
-                       1, 2, 3 
-    };
+    _vaos = create_vao_with_vbo(ver, sizeof(ver));
 
-    _vaos = create_vao_with_vbo(ver, sizeof(ver), ind, sizeof(ind));
+    glEnable(GL_DEPTH_TEST);
 }
 
 namespace 
@@ -82,30 +132,56 @@ namespace
     {
         return (std::sin(glfwGetTime())/2.0f)+0.5f;
     }
+    const float* get_model_matrix(glm::mat4& model, uint32_t counter)
+    {
+        glm::vec3 cubePositions[] = {
+            glm::vec3( 0.0f,  0.0f,  0.0f), 
+            glm::vec3( 2.0f,  5.0f, -15.0f), 
+            glm::vec3(-1.5f, -2.2f, -2.5f),  
+            glm::vec3(-3.8f, -2.0f, -12.3f),  
+            glm::vec3( 2.4f, -0.4f, -3.5f),  
+            glm::vec3(-1.7f,  3.0f, -7.5f),  
+            glm::vec3( 1.3f, -2.0f, -2.5f),  
+            glm::vec3( 1.5f,  2.0f, -2.5f), 
+            glm::vec3( 1.5f,  0.2f, -1.5f), 
+            glm::vec3(-1.3f,  1.0f, -1.5f)  
+        };
+        model = glm::translate(model, cubePositions[counter]);
+        float angle = (static_cast<float>(counter) + 0.1f)* static_cast<float>(glfwGetTime())*glm::radians(50.0f);
+        float y = static_cast<float>(counter)/10.0f;
+        float x = 1.0f - y;
+        float z = std::sin(static_cast<float>(glfwGetTime()));
+        model = glm::rotate(model, angle, glm::vec3(x, y, z));
+        return glm::value_ptr(model);
+    }
+
 
     const float* get_trans_matrix(glm::mat4& trans)
     {
-        trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
-        trans = glm::rotate(trans, static_cast<float>(glfwGetTime()), glm::vec3(0.0, 0.0, 1.0));
+    //    trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
+    //    trans = glm::rotate(trans, static_cast<float>(glfwGetTime()), glm::vec3(0.0, 0.0, 1.0));
         return glm::value_ptr(trans);
     }
 }
 
 void FirstObject::draw()
 {
-        glm::mat4 trans;
+    _program->use();
+    for(uint32_t t = 0; t < _textures.size(); ++t)
+    {
+        _textures.at(t)->activate(t);
+        _textures.at(t)->bind();
+    }
+    _vaos->bind_vao();
 
-        _program->use();
-        _uniform->set_value(get_trans_matrix(trans));
+    for( uint32_t u = 0; u < 10; ++u)
+    {
+        glm::mat4 model;
+        _uniform->set_value(get_model_matrix(model, u));
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+    }
 
-        for(uint32_t t = 0; t < _textures.size(); ++t)
-        {
-            _textures.at(t)->activate(t);
-            _textures.at(t)->bind();
-        }
-        _vaos->bind_vao();
 
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        _vaos->unbind_vao();
+    _vaos->unbind_vao();
 }
 
