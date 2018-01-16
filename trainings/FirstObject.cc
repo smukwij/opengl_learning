@@ -147,7 +147,13 @@ namespace
             glm::vec3(-1.3f,  1.0f, -1.5f)  
         };
         model = glm::translate(model, cubePositions[counter]);
-        float angle = (static_cast<float>(counter) + 0.1f)* static_cast<float>(glfwGetTime())*glm::radians(50.0f);
+ 
+        if(0 != (counter % 3))
+        {
+            return glm::value_ptr(model);
+        }
+
+       float angle = (static_cast<float>(counter) + 0.1f)* static_cast<float>(glfwGetTime())*glm::radians(50.0f);
         float y = static_cast<float>(counter)/10.0f;
         float x = 1.0f - y;
         float z = std::sin(static_cast<float>(glfwGetTime()));
