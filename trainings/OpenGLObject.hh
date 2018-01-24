@@ -2,6 +2,8 @@
 
 #include <memory>
 
+class GLFWwindow;
+
 class OpenGLObject
 {
 public:
@@ -10,6 +12,7 @@ public:
 
     virtual void setup() = 0;
     virtual void draw() = 0;
+    virtual void process_key(GLFWwindow* window) = 0;
 };
 
 

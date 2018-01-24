@@ -3,7 +3,7 @@
 
 #include <GLFW/glfw3.h>
 
-
+#include <iostream>
 
 namespace 
 {
@@ -19,8 +19,11 @@ namespace
 void RenderingLoop::run(GLFWwindow* window
     , std::vector<std::unique_ptr<OpenGLObject>>& objects)
 {
+    float start_time = glfwGetTime();
+    uint32_t counter = 0;
     while(false == glfwWindowShouldClose(window))
     {
+        ++counter;
         process_input(window);
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -28,10 +31,13 @@ void RenderingLoop::run(GLFWwindow* window
 
         for(const auto& o : objects)
         {
+            o->process_key(window);
             o->draw();
         }
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+    float stop_time = glfwGetTime();;
+    std::cout << "Time: " << ( stop_time - start_time)/static_cast<float>(counter) << std::endl;
 }
 

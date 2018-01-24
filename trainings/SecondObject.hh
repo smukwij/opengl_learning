@@ -17,7 +17,9 @@ public:
 
     void setup() override;
     void draw() override;
-
+    void process_key(GLFWwindow* window) override
+    {
+    }
 
 private:
     std::unique_ptr<Program>                _program;

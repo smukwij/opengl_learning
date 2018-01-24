@@ -1,6 +1,5 @@
 #include <cmath>
 
-#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -16,6 +15,9 @@
 
 FirstObject::FirstObject()
 {
+    _camera_pos = glm::vec3(0.0f, 0.0f, 3.0f);
+    _camera_front = glm::vec3(0.0f, 0.0f, -1.0f);
+    _camera_up = glm::vec3(0.0f, 1.0f, 0.0f);
 }
 
 FirstObject:: ~FirstObject()
@@ -62,11 +64,11 @@ void FirstObject::setup()
     glm::mat4 projection;
     projection = glm::perspective(glm::radians(45.0f), width/height, 0.1f, 100.0f);
 
-     _uniform = std::make_unique<Uniform>();
-    _uniform->init(_program->get_id(), "model");
+    _uniform_model = std::make_unique<Uniform>();
+    _uniform_model->init(_program->get_id(), "model");
 
-    int view_loc = glGetUniformLocation(_program->get_id(), "view");
-    glUniformMatrix4fv(view_loc, 1, GL_FALSE, glm::value_ptr(view));
+    _uniform_view = std::make_unique<Uniform>();
+    _uniform_view->init(_program->get_id(), "view");
 
     int projection_loc = glGetUniformLocation(_program->get_id(), "projection");
     glUniformMatrix4fv(projection_loc, 1, GL_FALSE, glm::value_ptr(projection));
@@ -143,17 +145,17 @@ namespace
             glm::vec3(-1.7f,  3.0f, -7.5f),  
             glm::vec3( 1.3f, -2.0f, -2.5f),  
             glm::vec3( 1.5f,  2.0f, -2.5f), 
-            glm::vec3( 1.5f,  0.2f, -1.5f), 
+           glm::vec3( 1.5f,  0.2f, -1.5f), 
             glm::vec3(-1.3f,  1.0f, -1.5f)  
         };
         model = glm::translate(model, cubePositions[counter]);
- 
+
         if(0 != (counter % 3))
         {
             return glm::value_ptr(model);
         }
 
-       float angle = (static_cast<float>(counter) + 0.1f)* static_cast<float>(glfwGetTime())*glm::radians(50.0f);
+        float angle = (static_cast<float>(counter) + 0.1f)* static_cast<float>(glfwGetTime())*glm::radians(50.0f);
         float y = static_cast<float>(counter)/10.0f;
         float x = 1.0f - y;
         float z = std::sin(static_cast<float>(glfwGetTime()));
@@ -161,14 +163,35 @@ namespace
         return glm::value_ptr(model);
     }
 
+    const float* get_view_matrix(glm::mat4& view, glm::vec3& pos, glm::vec3& front, glm::vec3& up)
+    {
+        view = glm::lookAt(pos, pos + front, up);
+        return glm::value_ptr(view);
+    }
+
 
     const float* get_trans_matrix(glm::mat4& trans)
     {
-    //    trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
-    //    trans = glm::rotate(trans, static_cast<float>(glfwGetTime()), glm::vec3(0.0, 0.0, 1.0));
+        trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
+        trans = glm::rotate(trans, static_cast<float>(glfwGetTime()), glm::vec3(0.0, 0.0, 1.0));
         return glm::value_ptr(trans);
     }
 }
+
+void FirstObject::process_key(GLFWwindow* window)
+{
+    const float camera_speed = 0.05f; // adjust accordingly
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        _camera_pos += camera_speed * _camera_front;
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        _camera_pos -= camera_speed * _camera_front;
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        _camera_pos -= glm::normalize(glm::cross(_camera_front, _camera_up)) * camera_speed;
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        _camera_pos += glm::normalize(glm::cross(_camera_front, _camera_up)) * camera_speed;
+}
+
 
 void FirstObject::draw()
 {
@@ -180,10 +203,12 @@ void FirstObject::draw()
     }
     _vaos->bind_vao();
 
+    glm::mat4 view;
+    _uniform_view->set_value(get_view_matrix(view, _camera_pos, _camera_front, _camera_up));
     for( uint32_t u = 0; u < 10; ++u)
     {
         glm::mat4 model;
-        _uniform->set_value(get_model_matrix(model, u));
+        _uniform_model->set_value(get_model_matrix(model, u));
         glDrawArrays(GL_TRIANGLES, 0, 36);
     }
 
